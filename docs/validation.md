@@ -45,3 +45,33 @@ installation was used to establish these results.
 
 This is a working local prototype. Do not infer whole-system formal correctness,
 OS-level immutable storage, authenticated authorship, or external app monitoring.
+
+## Read-only audit export
+
+The audit extension adds 28 synthetic acceptance tests to the original 35 tests
+(63 total). Run with an absolute source path so subprocesses outside the checkout
+can import the runtime:
+
+```sh
+PYTHONPATH="$PWD/src" python -m unittest discover -s tests -v
+python scripts/build_release.py
+python scripts/check_installed.py
+PYTHONPATH="$PWD/src" python examples/audit-demo.py
+```
+
+Audit cases cover full snapshots and stable IDs, original goal/provenance retention,
+current-version evidence bindings, missing/uncertain inputs, intermediate changes
+hidden by endpoint diffs, and restoration. File-tree fingerprints check names,
+bytes, modes and modification times across repeated reads and failures, including
+conflicting/missing pages and read-only filesystem permissions. Atime is excluded.
+Missing stores are never initialized. WAL is rejected before a connection can
+create shared-memory files. Hash/index tampering, future schemas, invalid JSON,
+strict UTF-8 stdin failures, oversized context and Python version integers, stale
+heads and incorrect evidence references fail explicitly.
+
+Two audit readers and a writer exercise actual SQLite concurrency. Installed-wheel
+smoke checks run outside the source checkout with PYTHONPATH removed, covering
+audit CLI/Python availability, no-write export and missing-store failure. These
+checks establish packaging and consistency behavior, not evidence truth or semantic
+findings. See [audit boundaries](audit.md) for unsupported external journal-mode
+changes, database substitution, and the limits of source declarations.

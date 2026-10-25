@@ -38,10 +38,31 @@ def main():
         assert run('call',request=restored)['data']['version']==3
         assert run('show','--format','json')['tasks']==run('show','--at','1','--format','json')['tasks']
         assert run('verify')['versions']==4
+        # Exercise audit from the installed wheel without any source imports.
+        missing=base/'never-created'
+        failed=subprocess.run([str(python),'-m','n_times_todo.cli','--store',str(missing),'audit'],
+                              input='{}',text=True,capture_output=True,cwd=base,env=env)
+        assert failed.returncode==1 and json.loads(failed.stdout)['error']['code']=='store_not_found'
+        assert not missing.exists()
+        context={'goal':{'source':'synthetic:installation','text':'验证安装后的只读导出'},'evidence':[]}
+        original_tasks=run('show','--at','1','--format','json')['tasks']
+        before={p.relative_to(base/'private'):(p.stat().st_mode,p.stat().st_mtime_ns,p.read_bytes())
+                for p in (base/'private').rglob('*') if p.is_file()}
+        audit=run('audit','--since','1','--expected-version','3',request=context)
+        assert audit['assessment']['status']=='not_evaluated'
+        assert audit['current']['version']==3 and audit['baseline']['version']==1
+        assert audit['current']['tasks']==original_tasks
+        after={p.relative_to(base/'private'):(p.stat().st_mode,p.stat().st_mtime_ns,p.read_bytes())
+               for p in (base/'private').rglob('*') if p.is_file()}
+        assert before==after
+        imported=subprocess.run([str(python),'-c','from n_times_todo import export_audit; assert callable(export_audit)'],
+                                cwd=base,env=env,capture_output=True)
+        assert imported.returncode==0,imported.stderr
         assert len(list((base/'private/versions').glob('*.json')))==4
         assert len(list((base/'private/versions').glob('*.md')))==4
         print(json.dumps({'ok':True,'versions':4,'isolated_install':True,'source_import':False,
-                          'covered':['init','add','complete','stale-conflict','replay','restore-as-new','full-pages','verify']}))
+                          'covered':['init','add','complete','stale-conflict','replay','restore-as-new','full-pages','verify',
+                                     'audit-cli','audit-python-import','audit-missing-store','audit-no-writes']}))
 
 if __name__=='__main__':
     main()

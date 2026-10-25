@@ -1,0 +1,32 @@
+{
+  "goal": {
+    "source": "synthetic:user-request:original",
+    "text": "编写合成示例并完成验证，公开仓库不含真实任务数据。"
+  },
+  "evidence": [
+    {
+      "id": "example-written",
+      "source": "synthetic:review-note:example",
+      "status": "provided",
+      "version": 2,
+      "task_ids": ["write"],
+      "text": "合成评审记录：示例已经编写；此条是调用方声明，不是真实验证报告。"
+    },
+    {
+      "id": "test-report",
+      "source": "synthetic:expected:test-report",
+      "status": "missing",
+      "version": 2,
+      "task_ids": ["test"],
+      "text": null
+    },
+    {
+      "id": "scope-note",
+      "source": "synthetic:unconfirmed:scope-note",
+      "status": "uncertain",
+      "version": 1,
+      "task_ids": [],
+      "text": "尚未确认：是否还需要独立复核公开文件中的合成数据标记。"
+    }
+  ]
+}

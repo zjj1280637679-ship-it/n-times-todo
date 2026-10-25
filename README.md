@@ -55,6 +55,17 @@ PYTHONPATH="$PWD/src" python -m n_times_todo.cli --store /your/private/todo-note
 
 详见 [API](docs/api.md)、[一致性与信任边界](docs/architecture.md)。
 
+## 只读审计上下文
+
+`audit` 将显式提供的原始目标、证据、完整当前快照和版本差异打包，供 AI 或人工检查遗漏、目标漂移与误解。它不输出这些语义检查已经通过的结论，也不自动修改目标或任务。
+
+```sh
+n-times-todo --store /your/private/todo-notebook audit --since 0 --expected-version 2 < examples/audit-context.json
+PYTHONPATH="$PWD/src" python examples/audit-demo.py
+```
+
+第一行的合成证据对应上面的两次示例更新（当前版本 2、任务 `write` / `test`）；第二行独立创建临时合成 store，输出审计包后清理。`audit` 不初始化不存在的 store，不生成或修复旧页面，支持现有运行时默认的 rollback journal store；WAL store 会明确拒绝。Python 入口为 `export_audit(...)`。输入格式、缺证状态、版本绑定与并发边界见 [审计导出说明](docs/audit.md)。
+
 ## 日历本的“页”是什么
 
 `history.sqlite3` 是唯一权威，事务一次保存完整快照与请求索引。
