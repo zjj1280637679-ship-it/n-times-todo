@@ -1,0 +1,1 @@
+{"tool":"todo.update","arguments":{"expected_version":1,"request_id":"demo-finish","reason":"示例已完成，转入验证","changes":[{"op":"edit","id":"write","set":{"status":"done","notes":"合成记录，无真实用户数据"}},{"op":"edit","id":"test","set":{"status":"doing"}}]}}

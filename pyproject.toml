@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "n-times-todo"
+version = "0.1.0"
+description = "Append-only, full-snapshot todo history with automatic diffs"
+requires-python = ">=3.10"
+license = "MIT"
+dependencies = []
+
+[project.scripts]
+n-times-todo = "n_times_todo.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

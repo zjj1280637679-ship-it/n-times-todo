@@ -1,0 +1,6 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "n-times-todo",
+  "version": "0.1.0",
+  "description": "N次贴的待办事项：完整历史快照、自动差异标注与可回溯恢复。"
+}

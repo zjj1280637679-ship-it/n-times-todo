@@ -1,0 +1,1 @@
+{"tool":"todo.update","arguments":{"expected_version":0,"request_id":"demo-add","reason":"建立合成交付计划","changes":[{"op":"add","task":{"id":"write","title":"编写示例","status":"doing"}},{"op":"add","task":{"id":"test","title":"运行测试"}}]}}

@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "tests": 35,
+  "test_result": "passed",
+  "model": {
+    "baseline": {
+      "ok": true,
+      "states": 421,
+      "edges": 1560,
+      "witness_edges": {
+        "commits": 184,
+        "conflicts": 80,
+        "replays_or_conflicts": 352,
+        "aborts": 616
+      }
+    },
+    "mutants": {
+      "overwrite_history": {
+        "ok": false,
+        "violation": "immutable_prefix",
+        "states": 13,
+        "edges": 14
+      },
+      "repeat_request": {
+        "ok": false,
+        "violation": "one_commit_per_request",
+        "states": 129,
+        "edges": 206
+      },
+      "ignore_cas": {
+        "ok": false,
+        "violation": "compare_and_swap",
+        "states": 113,
+        "edges": 182
+      }
+    },
+    "seconds": 0.029922863002866507,
+    "peak_traced_bytes": 143376,
+    "scope": "two writers, two IDs, two values, at most two committed updates; atomic transaction assumed, not implementation proof"
+  },
+  "installed": {
+    "ok": true,
+    "versions": 4,
+    "isolated_install": true,
+    "source_import": false,
+    "covered": [
+      "init",
+      "add",
+      "complete",
+      "stale-conflict",
+      "replay",
+      "restore-as-new",
+      "full-pages",
+      "verify"
+    ]
+  },
+  "artifacts": [
+    {
+      "name": "n_times_todo-0.1.0-py3-none-any.whl",
+      "bytes": 13153,
+      "sha256": "143506abb8d026726e2134c4562be604865b8fc7b18694a76daae627a278e58e"
+    },
+    {
+      "name": "n-times-todo-plugin-0.1.0.zip",
+      "bytes": 1904,
+      "sha256": "3d8952238935989fb77cccafebbdeec5483ce9fe980a00a3164c094d523bac17"
+    }
+  ],
+  "scope": "Local synthetic validation only; no external app monitoring or cloud plugin installation."
+}
