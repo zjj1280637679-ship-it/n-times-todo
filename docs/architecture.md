@@ -7,6 +7,7 @@
 3. store: single SQLite transaction authority, version relation, CAS, request idempotency, hashes.
 4. render: inert human-readable full page + automatic difference annotation; pure.
 5. api / cli: narrow dispatch and transport; store path supplied by trusted host.
+6. audit: independent read-only SQLite entrypoint; validates explicit evidence bindings and packages context without semantic judgments. See [audit](audit.md) for journal and concurrency boundaries.
 
 There is no second independent journal or auto-retry agent. Historical task IDs remain reserved; restore is an explicit relation to a prior immutable snapshot. Module relationships are managed by store, not by arbitrary cross-imports.
 

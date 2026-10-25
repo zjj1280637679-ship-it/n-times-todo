@@ -1,5 +1,7 @@
 # Closed API v1
 
+只读审计上下文另有独立的 `audit` CLI / `export_audit` Python 入口，详见 [审计使用说明](audit.md)。它不属于下列七个 `todo.*` 工具，不需构造会初始化存储的 `TodoStore`。
+
 输入均为 `{"tool":"todo.NAME","arguments":{...}}`。未知键、重复JSON键、非有限数字被拒绝。成功为 `{ok:true,data:...}`，预期业务失败为 `{ok:false,error:{code,detail}}`。CLI `call` 在业务失败时退出1。
 
 ## get / history / diff

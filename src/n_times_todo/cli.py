@@ -7,6 +7,7 @@ from .contracts import decode
 from .errors import TodoError
 from .render import markdown
 from .store import TodoStore
+from .audit import export_audit
 
 
 def main(argv=None):
@@ -24,12 +25,22 @@ def main(argv=None):
     comparison = sub.add_parser('diff')
     comparison.add_argument('before', type=int)
     comparison.add_argument('after', type=int)
+    audit = sub.add_parser('audit', help='export read-only audit context; read explicit goal/evidence JSON from stdin')
+    audit.add_argument('--since', type=int, default=0, help='baseline version (default: 0)')
+    audit.add_argument('--expected-version', type=int, help='reject a different committed head')
     sub.add_parser('verify')
     sub.add_parser('sync', help='recreate missing version pages without changing history')
     args = parser.parse_args(argv)
     try:
         if args.command == 'tools':
             output = {'schema_version': 1, 'tools': TOOLS, 'store': 'host-configured; not a model argument'}
+        elif args.command == 'audit':
+            try:
+                context = decode(sys.stdin.read(2_000_001))
+            except UnicodeError:
+                raise TodoError('invalid_arguments', 'invalid Unicode') from None
+            output = export_audit(args.store, context=context, since=args.since,
+                                  expected_version=args.expected_version)
         else:
             store = TodoStore(args.store)
             if args.command == 'call':
